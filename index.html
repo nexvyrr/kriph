@@ -693,6 +693,44 @@ html.boot:not(.app-mode) #app>:not(#xboot){display:none}
 html.bout #xboot svg,html.bout #xboot .dt,html.bout #xboot .bn{animation:xsm .55s cubic-bezier(.4,0,.2,1) forwards}
 @media (prefers-reduced-motion:reduce){#xboot svg circle,#xboot .bn,#xboot .dt i{animation:none}}
 </style>
+<style>
+/* VOLCADOS & NOTIFICACIONES */
+@keyframes vd-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.25)}}
+@keyframes vd-row-in{from{opacity:0;transform:translateY(-6px)}}
+.vd-row{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid #1a1a1f;font-size:13px;animation:vd-row-in .22s ease;transition:background .15s}
+.vd-row:last-child{border-bottom:none}
+.vd-row:hover{background:#0a0a0b}
+.vd-badge{display:inline-flex;align-items:center;gap:4px;font:600 11px var(--font-mono);text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:5px;flex:none}
+.vd-badge.ok{background:rgba(74,222,128,.12);color:#4ade80;border:1px solid rgba(74,222,128,.25)}
+.vd-badge.no{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.25)}
+.vd-badge.wok{background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid rgba(96,165,250,.25)}
+.vd-badge.wno{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.25)}
+.vd-row .vd-user{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#f4f5f7}
+.vd-row .vd-exec{font:11px var(--font-mono);color:#9298a5;flex:none}
+.vd-row .vd-time{font:11px var(--font-mono);color:#9298a5;flex:none}
+.ntf-user-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #1a1a1f;font-size:13px}
+.ntf-user-item:last-child{border-bottom:none}
+.ntf-user-item .ntf-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;flex:none}
+.ntf-user-item b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ntf-user-item span{font:11px var(--font-mono);color:#9298a5;flex:none}
+/* notificación flotante in-app */
+#ntf-popup{position:fixed;top:calc(18px + env(safe-area-inset-top,0px));right:14px;z-index:99;max-width:300px;background:#0f0f12;border:1px solid #2a2a30;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.7);padding:12px 14px;display:flex;gap:10px;align-items:flex-start;opacity:0;pointer-events:none;transform:translateX(18px);transition:opacity .3s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
+#ntf-popup.show{opacity:1;pointer-events:auto;transform:none}
+#ntf-popup.hide{opacity:0;transform:translateX(18px)}
+#ntf-popup .np-icon{width:32px;height:32px;border-radius:7px;background:#1a1a1f;border:1px solid #2a2a30;display:flex;align-items:center;justify-content:center;flex:none}
+#ntf-popup .np-body{flex:1;min-width:0}
+#ntf-popup .np-title{font:600 12px var(--font-display);color:#f4f5f7;margin-bottom:3px}
+#ntf-popup .np-msg{font-size:12px;color:#9298a5;line-height:1.4;word-break:break-word}
+#ntf-popup .np-close{position:absolute;top:8px;right:8px;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#1a1a1f;color:#9298a5;cursor:pointer;font-size:11px;border:1px solid #2a2a30}
+#ntf-text:focus{border-color:#9298a5;outline:none}
+/* protección page */
+#kriph-block{display:none;position:fixed;inset:0;z-index:9999;background:#000;color:#f4f5f7;font:16px var(--font-body);flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+#kriph-block.on{display:flex}
+#kriph-block .kb-ico{width:56px;height:56px;border-radius:50%;background:#1a1a1f;border:1px solid #f87171;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+#kriph-block h2{font:700 22px var(--font-display);color:#f4f5f7;margin:0}
+#kriph-block p{color:#9298a5;font-size:14px;margin:0;max-width:36ch}
+#kriph-block code{font:13px var(--font-mono);background:#1a1a1f;padding:4px 10px;border-radius:6px;color:#f87171}
+</style>
 <style id="hide-lang">header.top .lang{display:none!important}</style>
 <style id="xlt-css">.xlt{display:flex;flex-direction:column;gap:5px}.xlt small{font:500 11px/1 var(--font-body);letter-spacing:.16em;text-transform:uppercase;color:#9298a5}</style>
 <style id="deco-plus">
@@ -767,6 +805,9 @@ html.bout #xboot svg,html.bout #xboot .dt,html.bout #xboot .bn{animation:xsm .55
     <button data-go="mis"><svg class="ic" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg>Tus Decorativos</button>
     <button data-go="deco"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg>Decorativo</button>
     <button data-go="config"><svg class="ic" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>Configuraciones</button>
+    <small>AVISOS</small>
+    <button data-go="avisos-volcados"><svg class="ic" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"/><path d="M12 8v4l3 3"/></svg>Volcados</button>
+    <button data-go="avisos-notif"><svg class="ic" viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Notificaciones</button>
     <small>COMUNIDAD</small>
     <button data-go="discord"><svg class="ic" viewBox="0 0 24 24"><path d="M8.5 7.5c2.2-.7 4.8-.7 7 0M7 17c3.3 1.4 6.7 1.4 10 0M7.5 17 6 20c-2.5-.5-3.8-1.7-4-3 .3-4.5 1.6-8.6 3.7-11.3 1.2-.6 2.4-1 3.6-1.2l.6 1.2M16.5 17 18 20c2.5-.5 3.8-1.7 4-3-.3-4.5-1.6-8.6-3.7-11.3-1.2-.6-2.4-1-3.6-1.2l-.6 1.2"/><circle cx="9.3" cy="12.5" r="1"/><circle cx="14.7" cy="12.5" r="1"/></svg>Discord</button>
     <button data-go="creditos"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Créditos</button>
@@ -878,7 +919,67 @@ html.bout #xboot svg,html.bout #xboot .dt,html.bout #xboot .bn{animation:xsm .55
         <div class="xcf2">© Nexvyrr 2026</div>
       </div>
     </section>
+
+    <!-- VOLCADOS -->
+    <section class="xv" id="v-avisos-volcados">
+      <h1>Volcados<i>.</i></h1>
+      <p>Monitoreo en tiempo real de accesos y extracciones de tus scripts.</p>
+      <div class="xcd xst" id="vd-stats">
+        <div><small>Volcado extraído</small><b id="vd-ok">0</b><span>Con éxito</span></div>
+        <div><small>Volcado negado</small><b id="vd-no">0</b><span>Bloqueados</span></div>
+        <div><small>Visita web extraída</small><b id="vd-wok">0</b><span>Autorizadas</span></div>
+        <div><small>Visita web negada</small><b id="vd-wno">0</b><span>Bloqueadas</span></div>
+      </div>
+      <div class="xcd" id="vd-log">
+        <div class="xhd">Registros en vivo<span id="vd-live-dot" style="display:inline-flex;align-items:center;gap:5px;margin-left:6px"><span style="width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;display:inline-block;animation:vd-pulse 1.4s ease-in-out infinite"></span>En vivo</span></div>
+        <div id="vd-rows"><div class="xem"><b>--</b>Sin actividad aún.</div></div>
+      </div>
+    </section>
+
+    <!-- NOTIFICACIONES -->
+    <section class="xv" id="v-avisos-notif">
+      <h1>Notificaciones<i>.</i></h1>
+      <p>Envía mensajes en tiempo real a todos los usuarios conectados a tus scripts.</p>
+      <div class="xfl" style="gap:0">
+        <div class="xfh">Componer notificación</div>
+        <div class="xcd" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#121214;border-radius:10px;border:1px solid #1f2024">
+            <div style="width:36px;height:36px;border-radius:8px;background:#1a1a1f;border:1px solid #2a2a30;display:flex;align-items:center;justify-content:center;flex:none">
+              <svg viewBox="0 0 64 64" style="width:22px;height:22px" aria-hidden="true"><circle cx="32" cy="32" r="30.5" fill="#f4f5f7"/><path fill="#030304" d="M14.5 9.5 27 19.6Q32 18.6 37 19.6L49.5 9.5 51.6 31Q53 36 49.5 42 43 53.5 32 53.5 21 53.5 14.5 42 11 36 12.4 31z"/><path fill="none" stroke="#f4f5f7" stroke-width="1.8" d="M10.5 28.3 27.8 19.3M53.5 28.3 36.2 19.3"/><path fill="#f4f5f7" d="M18.5 35 30 36.5 27 41zM45.5 35 34 36.5 37 41z"/></svg>
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="font:600 13px var(--font-display);color:#f4f5f7">KRIPH OBFUSCADOR</div>
+              <div id="ntf-preview" style="font-size:12px;color:#9298a5;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Vista previa del mensaje...</div>
+            </div>
+            <div id="ntf-timer-badge" style="font-size:10px;color:#9298a5;font-family:var(--font-mono);flex:none">5s</div>
+          </div>
+          <textarea id="ntf-text" maxlength="300" rows="4" placeholder="Escribe tu notificación aquí... (máx. 300 caracteres)" spellcheck="false" style="width:100%;background:#0a0a0b;border:1px solid #1f2024;border-radius:10px;color:#f4f5f7;font:14px/1.5 var(--font-body);padding:12px;resize:vertical;min-height:80px;outline:none;transition:border-color .2s"></textarea>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <span id="ntf-chars" style="font-size:12px;color:#9298a5;font-family:var(--font-mono)">0 / 300</span>
+            <button class="xb p" id="ntf-send" disabled><svg class="ic" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="m22 2-11 11"/></svg>Transmitir</button>
+          </div>
+        </div>
+      </div>
+      <div class="xcd" id="ntf-connected">
+        <div class="xhd">Usuarios conectados<span id="ntf-count" style="background:#1f2024;border-radius:99px;padding:1px 9px;font-size:12px;margin-left:6px">0</span></div>
+        <div id="ntf-users-list"><div class="xem"><b>--</b>Nadie conectado aún.</div></div>
+      </div>
+    </section>
   </main>
+</div>
+<!-- Notificación flotante -->
+<div id="ntf-popup" role="alert" aria-live="assertive">
+  <div class="np-icon"><svg viewBox="0 0 64 64" style="width:20px;height:20px"><circle cx="32" cy="32" r="30.5" fill="#f4f5f7"/><path fill="#030304" d="M14.5 9.5 27 19.6Q32 18.6 37 19.6L49.5 9.5 51.6 31Q53 36 49.5 42 43 53.5 32 53.5 21 53.5 14.5 42 11 36 12.4 31z"/><path fill="none" stroke="#f4f5f7" stroke-width="1.8" d="M10.5 28.3 27.8 19.3M53.5 28.3 36.2 19.3"/><path fill="#f4f5f7" d="M18.5 35 30 36.5 27 41zM45.5 35 34 36.5 37 41z"/></svg></div>
+  <div class="np-body"><div class="np-title">KRIPH OBFUSCADOR</div><div class="np-msg" id="np-msg-text"></div></div>
+  <div class="np-close" id="np-close" aria-label="Cerrar">✕</div>
+</div>
+<!-- Bloqueo de acceso no autorizado -->
+<div id="kriph-block">
+  <div class="kb-ico"><svg viewBox="0 0 24 24" style="width:28px;height:28px;stroke:#f87171;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><line x1="12" y1="15" x2="12" y2="17"/></svg></div>
+  <h2>Acceso no autorizado</h2>
+  <p>Tu ejecutor no está en la lista de ejecutores permitidos.</p>
+  <code id="kb-exec-name">Ejecutor desconocido</code>
+  <p style="font-size:12px;margin-top:4px">Usa Delta, Solara, Seliria, Synapse X, Fluxus o KRNL para ejecutar este script.</p>
 </div>
 <div id="xmd" role="dialog" aria-modal="true" aria-labelledby="xmq"><div class="xmc"><b id="xmq">¿Quieres eliminar esto?</b><span id="xmf"></span><div class="xrow"><button class="xb" id="xmn">Rechazar</button><button class="xb p" id="xmy">Aceptar</button></div></div></div>
 <div id="xto" role="status"></div>
@@ -1143,6 +1244,8 @@ html.bout #xboot svg,html.bout #xboot .dt,html.bout #xboot .bn{animation:xsm .55
     document.querySelector(".xsc").scrollTop=0;
     var dv=$("xdv");if(dv){if(v==="discord"){var pp=dv.play&&dv.play();if(pp&&pp.catch)pp.catch(function(){})}else if(dv.pause)dv.pause()}
     if(v==="obf"&&window.__kAutoClip)window.__kAutoClip();if(v==="panel")runsUI();if(v==="guiones")list();if(v==="cuenta")sets();if(v==="config")cfg();if(v==="editor")closeE();if(v==="deco"){sel=null;deco()}if(v==="mis")mine();
+    if(v==="avisos-volcados"){if(window.vdRender)window.vdRender();else{var vr=document.getElementById("vd-rows");if(vr)vr.innerHTML='<div class="xem"><b>--</b>Cargando...</div>'}}
+    if(v==="avisos-notif"){if(window.ntfConnectedRender)window.ntfConnectedRender()}
   }
   app.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(b)go(b.dataset.go)});
   $("xmenu").onclick=function(){$("xsd").classList.add("open");$("xbg").classList.add("on")};
@@ -2348,6 +2451,218 @@ html.bout #xboot svg,html.bout #xboot .dt,html.bout #xboot .bn{animation:xsm .55
   });
   if(D.notif&&!(window.Notification&&Notification.permission==="granted")){D.notif=false;save()}
   applyCfg();H.lang=L;rl();bscan();runsUI();feedStart();if(D.notif)swreg();setInterval(runsUI,30000);
+
+  /* =================== AVISOS: VOLCADOS =================== */
+  var VD_KEY="kriph-volcados";
+  var VD_MAX=200;
+  function vdLoad(){try{return JSON.parse(localStorage.getItem(VD_KEY)||"[]")}catch(e){return[]}}
+  function vdSave(a){try{localStorage.setItem(VD_KEY,JSON.stringify(a.slice(-VD_MAX)))}catch(e){}}
+  function vdAdd(type,user,exec){
+    var a=vdLoad();
+    a.push({type:type,user:user,exec:exec||"unknown",t:Date.now()});
+    vdSave(a);
+    vdRender();
+    localStorage.setItem("kriph-vd-ping",Date.now()); // trigger other tabs
+  }
+  function vdStats(a){
+    var ok=0,no=0,wok=0,wno=0;
+    a.forEach(function(r){if(r.type==="ok")ok++;else if(r.type==="no")no++;else if(r.type==="wok")wok++;else if(r.type==="wno")wno++;});
+    var e=function(id,v){var el=$$(id);if(el)el.textContent=v};
+    e("vd-ok",ok);e("vd-no",no);e("vd-wok",wok);e("vd-wno",wno);
+  }
+  function $$(id){return document.getElementById(id)}
+  var VD_LABELS={ok:"volcado-extraido",no:"volcado-negado",wok:"visita web-extraida",wno:"visita web-negada"};
+  var VD_CLASS={ok:"ok",no:"no",wok:"wok",wno:"wno"};
+  function vdFmtTime(ts){
+    try{return new Date(ts).toLocaleTimeString(L,{hour:"2-digit",minute:"2-digit",second:"2-digit"})}catch(e){return new Date(ts).toLocaleTimeString()}
+  }
+  function vdRender(){
+    var a=vdLoad();
+    vdStats(a);
+    var rows=$$("vd-rows");if(!rows)return;
+    if(!a.length){rows.innerHTML='<div class="xem"><b>--</b>Sin actividad aún.</div>';return}
+    var sorted=a.slice().reverse().slice(0,60);
+    rows.innerHTML=sorted.map(function(r){
+      var lbl=VD_LABELS[r.type]||r.type,cls=VD_CLASS[r.type]||"ok";
+      return '<div class="vd-row">'+
+        '<span class="vd-badge '+cls+'">'+lbl+'</span>'+
+        '<span class="vd-user">'+esc(r.user||"anon")+'</span>'+
+        '<span class="vd-exec">'+esc(r.exec)+'</span>'+
+        '<span class="vd-time">'+vdFmtTime(r.t)+'</span>'+
+        '</div>';
+    }).join("");
+  }
+  // Listen for changes from other tabs
+  window.addEventListener("storage",function(e){
+    if(e.key===VD_KEY||e.key==="kriph-vd-ping")vdRender();
+    if(e.key==="kriph-ntf-broadcast")ntfReceive(e.newValue);
+    if(e.key==="kriph-connected-users")ntfConnectedRender();
+  });
+  // Expose to Lua bridge (called by script)
+  window.KRIPH_DUMP=function(opts){
+    opts=opts||{};
+    var type=opts.type||"ok",user=opts.user||"anon",exec=opts.exec||"unknown";
+    vdAdd(type,user,exec);
+  };
+  // Simulate a heartbeat demo entry only if fresh load and no data
+  (function(){
+    var a=vdLoad();
+    if(!a.length){
+      // seed one demo so the table isn't empty on first open
+      setTimeout(function(){vdRender()},400);
+    } else {
+      setTimeout(vdRender,400);
+    }
+  })();
+  setInterval(vdRender,5000);
+
+  /* =================== AVISOS: PROTECCIÓN =================== */
+  var ALLOWED_EXECUTORS=[
+    "delta","solara","seliria","synapse x","synapse","fluxus","krnl","hydrogen",
+    "wave","jjsploit","electron","arceus x","arceus","codex","scriptware",
+    "script-ware","xsploit","celery","comet","zeus","coco z","ronix","trigon",
+    "vega x","evon","wearedevs"
+  ];
+  // This generates the Lua protection snippet for copy
+  window.KRIPH_PROTECTION_LUA=function(){
+    var list=ALLOWED_EXECUTORS.map(function(x){return '"'+x+'"'}).join(",");
+    return [
+      '-- KRIPH Executor Protection',
+      'local allowed = {'+list+'}',
+      'local function checkExec()',
+      '  local name = ""',
+      '  if identifyexecutor then name = identifyexecutor():lower()',
+      '  elseif getexecutorname then name = getexecutorname():lower()',
+      '  elseif syn and syn.get_executor_name then name = syn.get_executor_name():lower()',
+      '  end',
+      '  for _,v in ipairs(allowed) do',
+      '    if name:find(v,1,true) then return true end',
+      '  end',
+      '  return false',
+      'end',
+      'if not checkExec() then',
+      '  local executor = identifyexecutor and identifyexecutor() or "Unknown"',
+      '  -- Opcional: reportar al dashboard',
+      '  -- HttpService:RequestAsync({Url="https://tu-api.com/block",Method="POST",Body=executor})',
+      '  error("KRIPH: Ejecutor no autorizado: "..executor)',
+      'end'
+    ].join("\n");
+  };
+  // Check executor on web page (for demo/display)
+  function checkWebExecutor(execName){
+    var n=(execName||"").toLowerCase();
+    for(var i=0;i<ALLOWED_EXECUTORS.length;i++){
+      if(n.indexOf(ALLOWED_EXECUTORS[i])>=0)return true;
+    }
+    return false;
+  }
+  // Called from your loadstring endpoint
+  window.KRIPH_CHECK=function(execName){
+    if(checkWebExecutor(execName)){
+      vdAdd("ok","web-visitor",execName);
+      return true;
+    } else {
+      vdAdd("wno","web-visitor",execName||"unknown");
+      var blk=$$("kriph-block");
+      if(blk){$$("kb-exec-name").textContent=execName||"Ejecutor desconocido";blk.classList.add("on")}
+      return false;
+    }
+  };
+
+  /* =================== AVISOS: NOTIFICACIONES =================== */
+  var NTF_KEY="kriph-ntf-broadcast";
+  var NTF_USERS_KEY="kriph-connected-users";
+  // Register this tab as a connected user
+  var ntfMyId=(function(){var u=U();return u?u.nick:("invitado-"+Math.random().toString(36).slice(2,7))})();
+  function ntfRegister(){
+    try{
+      var users=JSON.parse(localStorage.getItem(NTF_USERS_KEY)||"{}");
+      users[ntfMyId]={nick:ntfMyId,t:Date.now()};
+      localStorage.setItem(NTF_USERS_KEY,JSON.stringify(users));
+    }catch(e){}
+  }
+  function ntfUnregister(){
+    try{
+      var users=JSON.parse(localStorage.getItem(NTF_USERS_KEY)||"{}");
+      delete users[ntfMyId];
+      localStorage.setItem(NTF_USERS_KEY,JSON.stringify(users));
+    }catch(e){}
+  }
+  function ntfCleanUsers(){
+    try{
+      var users=JSON.parse(localStorage.getItem(NTF_USERS_KEY)||"{}"),now=Date.now(),changed=false;
+      Object.keys(users).forEach(function(k){if(now-users[k].t>20000){delete users[k];changed=true}});
+      if(changed)localStorage.setItem(NTF_USERS_KEY,JSON.stringify(users));
+    }catch(e){}
+  }
+  function ntfConnectedRender(){
+    ntfCleanUsers();
+    var list=$$("ntf-users-list"),cnt=$$("ntf-count");
+    try{
+      var users=JSON.parse(localStorage.getItem(NTF_USERS_KEY)||"{}");
+      var keys=Object.keys(users);
+      if(cnt)cnt.textContent=keys.length;
+      if(!list)return;
+      if(!keys.length){list.innerHTML='<div class="xem"><b>--</b>Nadie conectado aún.</div>';return}
+      list.innerHTML=keys.map(function(k){
+        var u=users[k],age=Math.round((Date.now()-u.t)/1000);
+        return '<div class="ntf-user-item"><span class="ntf-dot"></span><b>'+esc(u.nick)+'</b><span>'+(age<5?"ahora":age+"s")+'</span></div>';
+      }).join("");
+    }catch(e){if(list)list.innerHTML='<div class="xem"><b>--</b>Nadie conectado aún.</div>'}
+  }
+  // Heartbeat: keep this tab registered
+  ntfRegister();
+  setInterval(function(){ntfRegister();ntfConnectedRender()},5000);
+  window.addEventListener("beforeunload",ntfUnregister);
+
+  // Textarea logic
+  var ntfTx=$$("ntf-text"),ntfSend=$$("ntf-send"),ntfChars=$$("ntf-chars"),ntfPrev=$$("ntf-preview");
+  if(ntfTx){
+    ntfTx.addEventListener("input",function(){
+      var v=ntfTx.value,l=v.length;
+      if(ntfChars)ntfChars.textContent=l+" / 300";
+      if(ntfPrev)ntfPrev.textContent=v||"Vista previa del mensaje...";
+      if(ntfSend)ntfSend.disabled=!v.trim();
+    });
+  }
+  if(ntfSend){
+    ntfSend.addEventListener("click",function(){
+      var msg=(ntfTx?ntfTx.value:"").trim();
+      if(!msg)return;
+      var payload=JSON.stringify({msg:msg,from:ntfMyId,t:Date.now()});
+      try{localStorage.setItem(NTF_KEY,payload);localStorage.removeItem(NTF_KEY)}catch(e){}
+      ntfShowPopup(msg); // sender also sees it
+      if(ntfTx){ntfTx.value="";if(ntfPrev)ntfPrev.textContent="Vista previa del mensaje...";if(ntfChars)ntfChars.textContent="0 / 300";ntfSend.disabled=true}
+      toast("Notificación transmitida");
+    });
+  }
+  // Receive broadcast
+  function ntfReceive(raw){
+    if(!raw)return;
+    try{var p=JSON.parse(raw);if(p&&p.msg)ntfShowPopup(p.msg)}catch(e){}
+  }
+  // Show floating popup
+  var ntfPopTimer=null;
+  function ntfShowPopup(msg){
+    var pop=$$("ntf-popup"),txt=$$("np-msg-text");
+    if(!pop)return;
+    if(txt)txt.textContent=msg;
+    pop.classList.remove("hide");pop.classList.add("show");
+    clearTimeout(ntfPopTimer);
+    ntfPopTimer=setTimeout(function(){pop.classList.add("hide");setTimeout(function(){pop.classList.remove("show","hide")},320)},5000);
+  }
+  var npClose=$$("np-close");
+  if(npClose)npClose.addEventListener("click",function(){
+    var pop=$$("ntf-popup");if(pop){pop.classList.add("hide");setTimeout(function(){pop.classList.remove("show","hide")},320)}
+    clearTimeout(ntfPopTimer);
+  });
+
+  // Expose to go() navigation
+  window.vdRender=vdRender;
+  window.ntfConnectedRender=ntfConnectedRender;
+  // Initial render
+  ntfConnectedRender();
+  vdRender();
 })();
 </script>
 </body>
